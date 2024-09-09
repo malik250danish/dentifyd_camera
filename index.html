@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <style>
+      /* Styling for the loading indicator */
+      /* video {
+        display: block;
+        width: 400px;
+        height: 300px;
+        transform: scale(1.5);
+        transform-origin: center;
+        transform: scale(1.5); 
+        transform-origin: center;
+      } */
+      /* CSS */
+
+      #loading {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      #loading img {
+        width: 50px;
+        height: 50px;
+      }
+      .cardCap {
+        background-color: #f2f2f2;
+        height: 150px;
+        border-radius: 10px;
+      }
+      .cardCap2 {
+        background-color: #f2f2f2;
+
+        border-radius: 10px;
+      }
+      .cardCap2 img {
+        width: 100%;
+        max-height: 200px;
+      }
+      .chngBtn {
+        background-color: #707070;
+        color: #fff !important;
+        border-radius: 10px !important;
+      }
+      .SavBtn {
+        background-color: #0455bf;
+        color: #fff !important;
+        border-radius: 10px !important;
+      }
+      /* #video {
+        height: 100px;
+        width: 90%;
+      } */
+      .video-wrapper {
+        overflow: hidden;
+      }
+    </style>
+    <!-- main -->
+    <main class="container-fluid main">
+      <div class="container h-100" style="z-index: 2">
+        <!-- modal starts -->
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-toggle="modal"
+          data-target="#staticBackdrop"
+        >
+          Launch static backdrop modal
+        </button>
+        <form
+          class="card cardAuth"
+          id="form1"
+          method="post"
+          action="<?=base_url('site/saveAnswers')?>"
+          enctype="multipart/form-data"
+        >
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="staticBackdrop"
+            data-backdrop="static"
+            data-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content p-2">
+                <div class="d-flex justify-content-end">
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div>
+                    <div class="row">
+                      <!-- Main Container -->
+
+                      <div class="col-md-12 my-2">
+                        <div
+                          class="cardCap p-2 d-flex justify-content-center align-items-center"
+                        >
+                          <div
+                            id="selectPhotoBtn"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <img
+                              class="d-block mx-auto"
+                              src="./assets/images/upl.png"
+                              alt=""
+                            />
+                            <p class="text-center">Upload From Gallery</p>
+                          </div>
+                        </div>
+                        <!-- File Input -->
+                        <input
+                          type="file"
+                          name="image"
+                          id="uploadPhoto"
+                          class="d-none"
+                          accept="image/*"
+                        />
+                      </div>
+
+                      <div class="col-md-12 my-2">
+                        <div
+                          class="cardCap p-2 d-flex justify-content-center align-items-center"
+                          id="captureBtn"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                          data-bs-toggle="modal"
+                          data-bs-target="#cameraModal"
+                        >
+                          <div>
+                            <img
+                              class="d-block mx-auto"
+                              src="./assets/images/upl.png"
+                              alt=""
+                            />
+                            <p class="text-center">Live From Camera</p>
+                          </div>
+                        </div>
+                        <!-- File Input -->
+                        <input
+                          type="file"
+                          name="image"
+                          id="uploadPhoto"
+                          class="d-none"
+                          accept="image/*"
+                        />
+                      </div>
+
+                      <!-- Modal for Capturing Photo -->
+
+                      <!-- Hidden Canvas to Capture Image -->
+                      <canvas id="canvas" class="d-none"></canvas>
+
+                      <!--
+                          <div class="col-md-12 my-2">
+                              <input type="file" name="image" id="uploadPhoto" class="d-none" accept="image/*" capture="user" />
+                              <div class="row">
+                                  <div class="col-md-4 my-2">
+                                      <div id="photo"></div>
+                                  </div>
+                                  <div class="col-md-4 my-2">
+                                      <div class="w-100 d-flex justify-content-center align-items-center p-2" id="selectPhoto">
+                                          <div class="d-flex flex-column justify-content-center align-items-center">
+                                              <i class="fa-solid fa-camera"></i>
+                                              <small class="fssm">Add Your Photo</small>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- gallery modal -->
+          <div class="modal fade" id="gallery">
+            <div class="modal-dialog">
+              <div class="modal-content p-2">
+                <div class="d-flex justify-content-end">
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="col-md-12">
+                    <div class="cardCap2">
+                      <div id="photo"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div
+                      id="errorpic"
+                      class="alert alert-danger"
+                      style="display: none"
+                    >
+                      <strong>Error!</strong>Picture Invalid.
+                    </div>
+                    <div id="loading">
+                      <img
+                        src="https://buzzwaretech.com/dentifyduser/assets/1479.gif"
+                        alt="Loading..."
+                      />
+                      <p>Loading...</p>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                      <button
+                        class="btn chngBtn px-5"
+                        class="close"
+                        data-toggle="modal"
+                        data-target="#staticBackdrop"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        Change
+                      </button>
+                      <button type="submit" class="btn SavBtn px-5" id="submit">
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- modal ends -->
+          <div class="row h-100">
+            <div
+              class="col-md-4 my-2 align-self-center z-2 h-100 d-flex justify-content-center align-items-center"
+            >
+              <div>
+                <h1 class="he1">
+                  Welcome to <br />
+                  Dentifyd
+                </h1>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
+                  diam nonummy nibh euismod tincidunt ut laoreet dolore magna
+                  aliquam erat volutpat.
+                </p>
+              </div>
+            </div>
+            <div
+              class="col-md-8 my-2 align-self-center z-2 h-100 d-flex justify-content-center align-items-center"
+            ></div>
+          </div>
+        </form>
+      </div>
+    </main>
+    <!-- main end -->
+    <div
+      class="modal fade"
+      id="cameraModal"
+      tabindex="-1"
+      aria-labelledby="cameraModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="p-2 d-flex justify-content-between">
+            <h5 class="modal-title" id="cameraModalLabel">Capture Photo</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Video Stream for Camera -->
+            <div class="video-wrapper">
+              <video id="video" autoplay class=""></video>
+            </div>
+          </div>
+          <div class="p-2">
+            <!-- Capture Photo Button in Modal -->
+            <button
+              type="button"
+              class="btn btn-primary SavBtn"
+              id="capturePhotoBtn"
+            >
+              Capture Photo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
+
+<script>
+  // let eye = document.getElementById("eye");
+  // let password = document.getElementById("password");
+
+  // eye.onclick = () => {
+  //     if (password.type == "password") {
+  //         password.type = "text";
+  //     } else {
+  //         password.type = "password";
+  //     }
+  // };
+  // let nextBtn = document.getElementById("next");
+  // let backBtn = document.getElementById("back");
+  // let form1 = document.getElementById("form1");
+  // let form2 = document.getElementById("form2");
+  // nextBtn.onclick = (e) => {
+  //     e.preventDefault();
+
+  //     form1.classList.add("d-none");
+  //     form2.classList.remove("d-none");
+  // };
+  // backBtn.onclick = (e) => {
+  //     e.preventDefault();
+  //     form1.classList.remove("d-none");
+  //     form2.classList.add("d-none");
+  // };
+
+  function checkKeywords(description, keywords) {
+    for (var i = 0; i < keywords.length; i++) {
+      if (description.includes(keywords[i])) {
+        return true; // At least one keyword found in description
+      }
+    }
+    return false; // No keyword found in description
+  }
+
+  function mytestt(base64image) {
+    $("#loading").show();
+    var asticaAPI_endpoint = "https://vision.astica.ai/describe";
+    var asticaAPI_payload = {
+      tkn: "5E7416CF-AE4B-419E-96FC-121D1DF1C59C925029C7F9322A-8EA3-4AFD-B75E-0461391F2E67", //visit https://astica.ai
+      modelVersion: "2.5_full", //1.0_full, 2.0_full, 2.1_full or 2.5_full
+      input: base64image,
+      visionParams: "gpt, describe, describe_all, tags", //comma separated, leave blank for all. See below for more
+      gpt_prompt: "", // only used if visionParams includes "gpt" or "gpt_detailed"
+      prompt_length: 95, // number of words in GPT response
+      objects_custom_kw: "", // only used if visionParams includes "objects_custom" (v2.5_full or higher)
+    };
+
+    fetch(asticaAPI_endpoint, {
+      method: "post",
+      body: JSON.stringify(asticaAPI_payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+    })
+      .then((response) => response.json()) // convert to json
+      .then((data) => {
+        //print data to console
+        console.log("astica Vision AI Results");
+        console.log(data.tags);
+        //  var customString = data.tags.join(",");
+        var filteredData = data.tags.filter((obj) => obj.confidence > 0.85);
+
+        var customString = filteredData.map((obj) => obj.name).join(", ");
+        console.log("customString", customString);
+        console.log(data.caption_GPTS);
+        const description = data.caption_GPTS;
+        var keywords = ["teeth", "tooth", "laugh", "teeth", "smile"];
+        var keywords2 = ["head", "forhead", "eyes", "eye"];
+
+        var found = checkKeywords(description, keywords);
+        if (found) {
+          console.log("mainvalid");
+          var found1 = checkKeywords(customString, keywords2);
+          if (found1) {
+            $("#errorpic").show();
+            $("#loading").hide();
+            console.log("invalid");
+          } else {
+            console.log("valid");
+            $("#errorpic").hide();
+            $("#loading").hide();
+            $("#submit").removeAttr("disabled");
+          }
+        } else {
+          console.log("main invalid1");
+          $("#loading").hide();
+          $("#errorpic").show();
+        }
+      })
+      .catch((error) => {
+        // catch any errors
+        $("#loading").hide();
+        console.log("Error:", error);
+      });
+  }
+
+  function convertFileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+  //   for uploading photo
+  /*
+document.addEventListener("DOMContentLoaded", async function() {
+    const selectPhoto = document.getElementById("selectPhoto");
+    const uploadPhoto = document.getElementById("uploadPhoto");
+    const photoDiv = document.getElementById("photo");
+
+    // When selectPhoto is clicked
+    selectPhoto.addEventListener("click", function() {
+        // Trigger click event on the uploadPhoto input
+        uploadPhoto.click();
+    });
+
+    // When a file is selected
+    uploadPhoto.addEventListener("change", async function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            $("#errorpic").hide();
+            $('#submit').attr('disabled', 'disabled');
+
+            const base64Image = await convertFileToBase64(file);
+            console.log("base64Image", base64Image)
+            // Display the selected photo in the photoDiv
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.classList.add("img-fluid");
+                photoDiv.innerHTML = ""; // Clear previous content
+                photoDiv.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+            mytestt(base64Image);
+        }
+    });
+});
+*/
+  const cameraModal = new bootstrap.Modal(
+    document.getElementById("cameraModal")
+  );
+
+  captureBtn.addEventListener("click", function () {
+    // Show the modal manually
+
+    cameraModal.show();
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const selectPhotoBtn = document.getElementById("selectPhotoBtn");
+    const uploadPhoto = document.getElementById("uploadPhoto");
+    const captureBtn = document.getElementById("captureBtn");
+    const capturePhotoBtn = document.getElementById("capturePhotoBtn");
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const photoDiv = document.getElementById("photo");
+
+    let streaming = false;
+
+    // When "Select Photo from File" is clicked
+    selectPhotoBtn.addEventListener("click", function () {
+      // Trigger click event on the uploadPhoto input to open file selection
+      uploadPhoto.click();
+    });
+
+    // When a file is selected from the input
+    uploadPhoto.addEventListener("change", async function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        // Convert the selected file to base64
+        const base64Image = await convertFileToBase64(file);
+        console.log("Base64 Image from File:", base64Image);
+        mytestt(base64Image);
+
+        // Display the selected image
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.classList.add("img-fluid");
+          photoDiv.innerHTML = ""; // Clear previous content
+          photoDiv.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      const galleryModel = new bootstrap.Modal(
+        document.getElementById("gallery")
+      );
+
+      // Show the modal manually
+
+      galleryModel.show();
+    });
+
+    // Open modal and start camera streaming when "Capture Online" button is clicked
+    captureBtn.addEventListener("click", async function () {
+      if (!streaming) {
+        try {
+          // Request access to the camera
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            zoom: true,
+          });
+          video.srcObject = stream;
+          streaming = true;
+        } catch (error) {
+          console.error("Error accessing the camera:", error);
+          alert("Unable to access the camera.");
+        }
+      }
+    });
+
+    // JavaScript (no change needed from previous setup)
+    // Capture the photo when "Capture Photo" button is clicked inside the modal
+    capturePhotoBtn.addEventListener("click", function () {
+      if (streaming) {
+        const context = canvas.getContext("2d");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
+        // Convert the captured image to Base64
+        const imageDataURL = canvas.toDataURL("image/png");
+        console.log("Captured Image Data URL:", imageDataURL);
+        mytestt(imageDataURL);
+
+        // Stop the camera stream
+        video.srcObject.getTracks().forEach((track) => track.stop());
+        streaming = false;
+
+        // Display the captured image in the photoDiv
+        const img = document.createElement("img");
+        img.src = imageDataURL;
+        img.classList.add("img-fluid");
+
+        photoDiv.innerHTML = ""; // Clear previous content
+        photoDiv.appendChild(img);
+
+        // Close the modal after capturing the image
+        cameraModal.hide();
+        const galleryModel = new bootstrap.Modal(
+          document.getElementById("gallery")
+        );
+
+        // Show the modal manually
+
+        galleryModel.show();
+
+        // Additional processing (e.g., upload) can be done here
+      }
+    });
+    // Function to convert a file to Base64
+    function convertFileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+    }
+  });
+</script>
